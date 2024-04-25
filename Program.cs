@@ -24,14 +24,14 @@ namespace Car_plates
             {
                 {"01", new string[] {"prishtine", "podujeve", "lipjan", "drenas"}},
                 {"02", new string[] {"mitrovice", "skenderaj", "vushtrri"}},
-                {"03", new string[] {"peje", "kline", "istog", "decan"}},
+                {"03", new string[] {"peje", "kline", "istog", "decan", "junik"}},
                 {"04", new string[] {"prizren", "suhareke"}},
                 {"05", new string[] {"ferizaj", "shtime"}},
                 {"06", new string[] {"gjilan", "gracanice"}},
                 {"07", new string[] {"gjakove", "malisheve"}}
             };
 
-            // Invert the dictionary to map from city names to codes
+            //this inverts the dictionary to map from city names to codes
             var citiesToCodes = codesToCities
                 .SelectMany(pair => pair.Value, (pair, city) => new { City = city, Code = pair.Key })
                 .ToDictionary(pair => pair.City, pair => pair.Code);
