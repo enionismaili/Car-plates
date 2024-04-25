@@ -25,10 +25,10 @@ namespace Car_plates
                 {"01", new string[] {"prishtine", "podujeve", "lipjan", "drenas"}},
                 {"02", new string[] {"mitrovice", "skenderaj", "vushtrri"}},
                 {"03", new string[] {"peje", "kline", "istog", "decan", "junik"}},
-                {"04", new string[] {"prizren", "suhareke"}},
-                {"05", new string[] {"ferizaj", "shtime"}},
-                {"06", new string[] {"gjilan", "gracanice"}},
-                {"07", new string[] {"gjakove", "malisheve"}}
+                {"04", new string[] {"prizren", "suhareke", "dragash"}},
+                {"05", new string[] {"ferizaj", "shtime", "hani i elezit"}},
+                {"06", new string[] {"gjilan", "gracanice", "viti"}},
+                {"07", new string[] {"gjakove", "malisheve", "rahovec"}}
             };
 
             //this inverts the dictionary to map from city names to codes
