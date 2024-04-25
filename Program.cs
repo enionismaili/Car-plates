@@ -13,11 +13,12 @@ namespace Car_plates
             char shkronjaDyte = (char)('A' + random.Next(0, 26)); // this generates a letter too, in the same way as the first one, for the second letter of the plates 
             
             
-            return $"{shifrat} / {numrat} - {shkronjaPare}{shkronjaDyte}";//it returnd the format of plate number
+            return $"{shifrat} / {numrat} - {shkronjaPare}{shkronjaDyte}";//it returns the format of plate number
         }
 
         static void Main(string[] args)
-        {
+        { 
+            A:
             Console.WriteLine("Shenoje qytetin: "); //it asks the user to enter the name of the city
             string komuna = Console.ReadLine().ToLower(); //this reads, stores and converts to lowercase the whole string entered by the user
          
@@ -25,22 +26,31 @@ namespace Car_plates
             var shifrat = new Dictionary<string, string>
             {
                 {"prishtine", "01" },
+                {"podujeve", "01" },
                 {"mitrovice", "02" },
+                {"skenderaj", "02" },
+                {"vushtrri", "02" },
                 {"peje", "03" },
+                {"kline", "03" },
                 {"prizren", "04" },
+                {"suhareke", "04" },
                 {"ferizaj", "05" },
+                {"shtime", "05" },
                 {"gjilan", "06" },
+                {"gracanice", "06" },
                 {"gjakove", "07" },
+                {"malisheve", "07" }
             };
 
             if (shifrat.ContainsKey(komuna)) //this checks if the entered city by the user is in the dictionary
             {
                 string tabelat = GeneratePlateNumber(shifrat[komuna]); //this calls the method above this main program, and generates the formatted plate number
-                Console.WriteLine("Tabelat tuaja jane: " + tabelat); //this prints the formatted plate number
+                Console.WriteLine("Targat tuaja: " + tabelat); //this prints the formatted plate number
             }
             else //if the condition above isn't met, then it will print the message below
             {
-                Console.WriteLine("Shikoni edhe njehere si e keni shkruar qytetin");
+                Console.WriteLine("Emri i qytetit nuk eshte dhene sic duhet!");
+                goto A;
             }
 
 
