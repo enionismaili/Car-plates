@@ -45,7 +45,7 @@ namespace Car_plates
                 {"03", new string[] {"peje", "kline", "istog", "decan", "junik"}},
                 {"04", new string[] {"prizren", "suhareke", "dragash"}},
                 {"05", new string[] {"ferizaj", "shtime", "hani i elezit"}},
-                {"06", new string[] {"gjilan", "gracanice", "viti"}},
+                {"06", new string[] {"gjilan", "gracanice", "viti", "kamenice"}},
                 {"07", new string[] {"gjakove", "malisheve", "rahovec"}}
             };
 
