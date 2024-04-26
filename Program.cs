@@ -36,7 +36,6 @@ namespace Car_plates
             }
 
 
-
             //here is created a dictionary to map city codes to city names, using arrays to map multiple cities in a city code
             var codesToCities = new Dictionary<string, string[]>
             {
