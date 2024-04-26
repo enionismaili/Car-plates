@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,6 +20,23 @@ namespace Car_plates
 
         static void Main(string[] args)
         {
+
+            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=Car plates;Trusted_Connection=True;MultipleActiveResultSets=true";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();  
+                    Console.WriteLine("Connection successful! \n");
+                }
+                catch (SqlException e)
+                {
+                    Console.WriteLine("Error in connection: " + e.Message);
+                }
+            }
+
+
+
             //here is created a dictionary to map city codes to city names, using arrays to map multiple cities in a city code
             var codesToCities = new Dictionary<string, string[]>
             {
@@ -49,7 +67,7 @@ namespace Car_plates
                 }
                 else //if the condition above isn't met, then it prints the message below
                 {
-                    Console.WriteLine("Emri i qytetit nuk është dhënë siç duhet! Provoni përsëri.");
+                    Console.WriteLine("Emri i qytetit nuk është dhënë siç duhet! Provoni përsëri. \n");
                 }
             }
         }
