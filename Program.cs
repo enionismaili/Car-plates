@@ -7,66 +7,85 @@ namespace Car_plates
 {
     internal class Program
     {
-        //here is declared a method to generate the formatted plate number
         static string GeneratePlateNumber(string code)
         {
-            Random random = new Random(); //here is created a new random object
-            int numbers = random.Next(100, 1000); //this generates a number from 100 to 1000
-            char firstLetter = (char)('A' + random.Next(0, 26)); //this generates a letter from "A" to "Z"
-            char secondLetter = (char)('A' + random.Next(0, 26)); //this does the same thing as above line, generates a letter from "A" to "Z"
+            Random random = new Random();
+            int numbers = random.Next(100, 1000);
+            char firstLetter = (char)('A' + random.Next(0, 26));
+            char secondLetter = (char)('A' + random.Next(0, 26));
 
-            return $"{code} / {numbers} - {firstLetter}{secondLetter}"; //this returns the formatted plate number
+            return $"{code} / {numbers} - {firstLetter}{secondLetter}";
         }
 
         static void Main(string[] args)
         {
+            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=Car_plates;Trusted_Connection=True;MultipleActiveResultSets=true";
 
-            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=Car plates;Trusted_Connection=True;MultipleActiveResultSets=true";
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();  
-                    Console.WriteLine("Connection successful! \n");
-                }
-                catch (SqlException e)
-                {
-                    Console.WriteLine("Error in connection: " + e.Message);
-                }
-            }
-
-
-            //here is created a dictionary to map city codes to city names, using arrays to map multiple cities in a city code
+            // Dictionary setup as before
             var codesToCities = new Dictionary<string, string[]>
             {
                 {"01", new string[] {"prishtine", "podujeve", "lipjan", "drenas"}},
-                {"02", new string[] {"mitrovice", "skenderaj", "vushtrri"}},
-                {"03", new string[] {"peje", "kline", "istog", "decan", "junik"}},
-                {"04", new string[] {"prizren", "suhareke", "dragash"}},
-                {"05", new string[] {"ferizaj", "shtime", "hani i elezit"}},
-                {"06", new string[] {"gjilan", "gracanice", "viti", "kamenice"}},
-                {"07", new string[] {"gjakove", "malisheve", "rahovec"}}
+                // Add other codes and cities
             };
 
-            //this inverts the dictionary to map from city names to codes
             var citiesToCodes = codesToCities
                 .SelectMany(pair => pair.Value, (pair, city) => new { City = city, Code = pair.Key })
                 .ToDictionary(pair => pair.City, pair => pair.Code);
 
-            while (true)
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                Console.WriteLine("Shënoni qytetin tuaj: "); //it prompts the user to enter the city name
-                string city = Console.ReadLine().ToLower(); //it reads the input and converts it to lowercase
+                connection.Open();
+                Console.WriteLine("Connection successful! \n");
 
-                if (citiesToCodes.TryGetValue(city, out string code))
+                while (true)
                 {
-                    string plate = GeneratePlateNumber(code); //this generates the formatted plate number
-                    Console.WriteLine("Targat tuaja: " + plate); //it displays the plate number on console
-                    break;
-                }
-                else //if the condition above isn't met, then it prints the message below
-                {
-                    Console.WriteLine("Emri i qytetit nuk është dhënë siç duhet! Provoni përsëri. \n");
+                    Console.WriteLine("Shënoni qytetin tuaj: ");
+                    string city = Console.ReadLine().ToLower();
+
+                    if (citiesToCodes.TryGetValue(city, out string code))
+                    {
+                        string plate = GeneratePlateNumber(code);
+                        Console.WriteLine("Targat tuaja: " + plate);
+
+                        // Inserting the data into the database
+                        string insertQuery = "INSERT INTO Plates (City, Plates) VALUES (@City, @Plates)";
+                        using (SqlCommand command = new SqlCommand(insertQuery, connection))
+                        {
+                            try
+                            {
+                                command.Parameters.AddWithValue("@City", city);
+                                command.Parameters.AddWithValue("@Plates", plate);
+
+                                int result = command.ExecuteNonQuery(); // This should return the number of rows affected
+                                Console.WriteLine($"{result} rows inserted.");
+                            }
+                            catch (SqlException ex)
+                            {
+                                Console.WriteLine("SQL Error: " + ex.Message);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("General Error: " + ex.Message);
+                            }
+                        }
+
+
+                        // Display all entries from the database
+                        string selectQuery = "SELECT City, Plate FROM Plates";
+                        SqlCommand selectCommand = new SqlCommand(selectQuery, connection);
+                        using (SqlDataReader reader = selectCommand.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Console.WriteLine($"City: {reader["City"]}, Plate: {reader["Plates"]}");
+                            }
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Emri i qytetit nuk është dhënë siç duhet! Provoni përsëri. \n");
+                    }
                 }
             }
         }
